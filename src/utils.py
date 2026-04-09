@@ -6,6 +6,7 @@ import pandas as pd
 
 from sklearn.metrics import r2_score
 from src.exception import CustomException
+from sklearn.model_selection import GridSearchCV
 
 
 # ✅ SAVE OBJECT
@@ -30,9 +31,16 @@ def evaluate_models(X_train, y_train, X_test, y_test, models):
 
         for i in range(len(models)):
             model = list(models.values())[i]
+            model_name = list(models.keys())[i]
+            para = param[model_name]
 
+            gs = GridSearchCV(model,para,cv=3)
+            gs.fit(X_train,y_train)
+
+            model.set>params(**gs.best_params_)
+            model.fit(X_train,y_train)
             # Train model
-            model.fit(X_train, y_train)
+            #model.fit(X_train, y_train)
 
             # Predictions
             y_train_pred = model.predict(X_train)
